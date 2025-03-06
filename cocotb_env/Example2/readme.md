@@ -1,6 +1,6 @@
 # Pipelined Adder
 
-This is a 4-stage pipelined **Multiply-and-Add** module designed with **ready-valid handshaking** for efficient data processing.
+This is a 4-stage pipelined **Multiply-and-Add** module designed with **ready-valid handshaking** for reliable data processing.
 
 ## Overview
 The module performs `result = (in_a * in_b) + in_c` in a pipelined manner over **four stages**:
@@ -10,13 +10,23 @@ The module performs `result = (in_a * in_b) + in_c` in a pipelined manner over *
 3. **Addition:** Add stored `c` value from the previous cycle.
 4. **Output Stage:** Provide the final result.
 
-It ensures seamless handshaking with `valid_in`, `ready_out`, `valid_out`, and `ready_in` signals.
 
 ---
 
 ## Block Diagram
 ![Pipeline Diagram](architecture.png)  
-*(Replace `path/to/your/image.png` with the actual image path)*
+
+## Results  (log_output.txt)
+![Results](results.png) 
+
+the full behaviour of the pipeline is shown here 
+1. without waitng for `ready_out` external module will drive inputs and data will be missed 
+2. reset at the middle of the data sequence
+
+## Improvements
+1. add a predictor look at the 4th previous input and predict the output in the cocotb test bench
+2. drive random inputs
+3. have `fun` with pytohn test benches
 
 ---
 
@@ -36,13 +46,4 @@ It ensures seamless handshaking with `valid_in`, `ready_out`, `valid_out`, and `
 | `ready_in`  | 1-bit  | Input     | Downstream ready signal |
 
 ---
-
-## Operation
-
-- New data is accepted when **`valid_in` & `ready_out` are high**.
-- Computation occurs across **4 clock cycles**.
-- `valid_out` indicates when the result is ready.
-- Ready-valid handshake ensures seamless pipelined operation.
-
-### Example Waveform
 
