@@ -64,6 +64,7 @@ module pipelined_adder (
             //output the result and valid signal is driven by assign statement by the valid_out_reg_shift register 4 th value 
             result  <= acc_reg;        
 
+            //check weather the output is duplicated
             valid_out_validate <= result != acc_reg;    
         end
     end
