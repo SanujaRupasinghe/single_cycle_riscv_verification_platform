@@ -1,4 +1,4 @@
-# Pipelined Adder
+# Pipelined Multiply and Accumulator
 
 This is a 4-stage pipelined **Multiply-and-Add** module designed with **ready-valid handshaking** for reliable data processing.
 
@@ -28,4 +28,5 @@ the full behaviour of the pipeline is shown here
 
 ---
 # Note
-In the test bench `ready_in` is always driven high brcause of that some input signals are missed by the DUT and output is duplicated
+1. In the test bench `ready_in` is always driven high 
+2. In test1 `valid_in` is always 1 and in test2 `valid_in` is 80% of the time is 1 because test bench provide data that are valid without looking at the `ready_out`, some input signals are missed by the DUT and output is duplicated
