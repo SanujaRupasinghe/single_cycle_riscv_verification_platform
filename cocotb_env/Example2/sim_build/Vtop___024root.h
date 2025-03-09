@@ -34,6 +34,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule
     CData/*7:0*/ pipelined_adder__DOT__b_reg;
     CData/*3:0*/ pipelined_adder__DOT__valid_out_reg_shift;
     CData/*0:0*/ pipelined_adder__DOT__input_buffers_full;
+    CData/*0:0*/ pipelined_adder__DOT__valid_out_validate;
     CData/*0:0*/ __VstlFirstIteration;
     CData/*0:0*/ __VicoFirstIteration;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;

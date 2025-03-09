@@ -32,8 +32,8 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
     vlSelfRef.result = vlSelfRef.pipelined_adder__DOT__result;
     vlSelfRef.pipelined_adder__DOT__ready_out = (1U 
                                                  & (~ (IData)(vlSelfRef.pipelined_adder__DOT__input_buffers_full)));
-    vlSelfRef.pipelined_adder__DOT__valid_out = (1U 
-                                                 & (IData)(vlSelfRef.pipelined_adder__DOT__valid_out_reg_shift));
+    vlSelfRef.pipelined_adder__DOT__valid_out = ((IData)(vlSelfRef.pipelined_adder__DOT__valid_out_reg_shift) 
+                                                 & (IData)(vlSelfRef.pipelined_adder__DOT__valid_out_validate));
     vlSelfRef.ready_out = vlSelfRef.pipelined_adder__DOT__ready_out;
     vlSelfRef.valid_out = vlSelfRef.pipelined_adder__DOT__valid_out;
 }
@@ -77,10 +77,14 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop___024root___nba_sequent__TOP__0\n"); );
     Vtop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Init
+    SData/*15:0*/ __Vdly__pipelined_adder__DOT__result;
+    __Vdly__pipelined_adder__DOT__result = 0;
     // Body
+    __Vdly__pipelined_adder__DOT__result = vlSelfRef.pipelined_adder__DOT__result;
     if (vlSelfRef.reset) {
         vlSelfRef.pipelined_adder__DOT__valid_out_reg_shift = 0U;
-        vlSelfRef.pipelined_adder__DOT__result = 0U;
+        __Vdly__pipelined_adder__DOT__result = 0U;
         vlSelfRef.pipelined_adder__DOT__acc_reg = 0U;
         vlSelfRef.pipelined_adder__DOT__c_reg_2 = 0U;
         vlSelfRef.pipelined_adder__DOT__mul_reg = 0U;
@@ -92,7 +96,10 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
             = (((IData)(vlSelfRef.valid_in) << 3U) 
                | (7U & ((IData)(vlSelfRef.pipelined_adder__DOT__valid_out_reg_shift) 
                         >> 1U)));
-        vlSelfRef.pipelined_adder__DOT__result = vlSelfRef.pipelined_adder__DOT__acc_reg;
+        vlSelfRef.pipelined_adder__DOT__valid_out_validate 
+            = ((IData)(vlSelfRef.pipelined_adder__DOT__result) 
+               != (IData)(vlSelfRef.pipelined_adder__DOT__acc_reg));
+        __Vdly__pipelined_adder__DOT__result = vlSelfRef.pipelined_adder__DOT__acc_reg;
         vlSelfRef.pipelined_adder__DOT__acc_reg = (0xffffU 
                                                    & ((IData)(vlSelfRef.pipelined_adder__DOT__mul_reg) 
                                                       + (IData)(vlSelfRef.pipelined_adder__DOT__c_reg_2)));
@@ -100,7 +107,8 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
         vlSelfRef.pipelined_adder__DOT__mul_reg = (0xffffU 
                                                    & ((IData)(vlSelfRef.pipelined_adder__DOT__a_reg) 
                                                       * (IData)(vlSelfRef.pipelined_adder__DOT__b_reg)));
-        if (((IData)(vlSelfRef.valid_in) & (IData)(vlSelfRef.pipelined_adder__DOT__ready_out))) {
+        if (((IData)(vlSelfRef.pipelined_adder__DOT__ready_out) 
+             & (IData)(vlSelfRef.valid_in))) {
             vlSelfRef.pipelined_adder__DOT__c_reg_1 
                 = vlSelfRef.in_c;
             vlSelfRef.pipelined_adder__DOT__a_reg = vlSelfRef.in_a;
@@ -108,11 +116,12 @@ VL_INLINE_OPT void Vtop___024root___nba_sequent__TOP__0(Vtop___024root* vlSelf) 
         }
     }
     vlSelfRef.pipelined_adder__DOT__input_buffers_full 
-        = ((1U & (~ (IData)(vlSelfRef.reset))) && ((IData)(vlSelfRef.valid_in) 
-                                                   & (IData)(vlSelfRef.pipelined_adder__DOT__ready_out)));
-    vlSelfRef.pipelined_adder__DOT__valid_out = (1U 
-                                                 & (IData)(vlSelfRef.pipelined_adder__DOT__valid_out_reg_shift));
+        = ((1U & (~ (IData)(vlSelfRef.reset))) && ((IData)(vlSelfRef.pipelined_adder__DOT__ready_out) 
+                                                   & (IData)(vlSelfRef.valid_in)));
+    vlSelfRef.pipelined_adder__DOT__result = __Vdly__pipelined_adder__DOT__result;
     vlSelfRef.result = vlSelfRef.pipelined_adder__DOT__result;
+    vlSelfRef.pipelined_adder__DOT__valid_out = ((IData)(vlSelfRef.pipelined_adder__DOT__valid_out_reg_shift) 
+                                                 & (IData)(vlSelfRef.pipelined_adder__DOT__valid_out_validate));
     vlSelfRef.valid_out = vlSelfRef.pipelined_adder__DOT__valid_out;
     vlSelfRef.pipelined_adder__DOT__ready_out = (1U 
                                                  & (~ (IData)(vlSelfRef.pipelined_adder__DOT__input_buffers_full)));

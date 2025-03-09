@@ -22,7 +22,7 @@ Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, const char* namep, Vtop* mode
     , TOP{this, namep}
 {
         // Check resources
-        Verilated::stackCheck(25);
+        Verilated::stackCheck(29);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-9);
     _vm_contextp__->timeprecision(-12);
@@ -66,5 +66,6 @@ Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, const char* namep, Vtop* mode
         __Vscope_pipelined_adder.varInsert(__Vfinal,"valid_in", &(TOP.pipelined_adder__DOT__valid_in), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,0,0);
         __Vscope_pipelined_adder.varInsert(__Vfinal,"valid_out", &(TOP.pipelined_adder__DOT__valid_out), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,0,0);
         __Vscope_pipelined_adder.varInsert(__Vfinal,"valid_out_reg_shift", &(TOP.pipelined_adder__DOT__valid_out_reg_shift), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,0,1 ,3,0);
+        __Vscope_pipelined_adder.varInsert(__Vfinal,"valid_out_validate", &(TOP.pipelined_adder__DOT__valid_out_validate), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,0,0);
     }
 }

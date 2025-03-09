@@ -179,5 +179,6 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->pipelined_adder__DOT__acc_reg = VL_RAND_RESET_I(16);
     vlSelf->pipelined_adder__DOT__valid_out_reg_shift = VL_RAND_RESET_I(4);
     vlSelf->pipelined_adder__DOT__input_buffers_full = VL_RAND_RESET_I(1);
+    vlSelf->pipelined_adder__DOT__valid_out_validate = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
 }

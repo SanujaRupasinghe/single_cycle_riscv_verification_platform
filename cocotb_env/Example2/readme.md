@@ -26,7 +26,6 @@ the full behaviour of the pipeline is shown here
 ## Improvements
 1. add a predictor look at the 4th previous input and predict the output in the cocotb test bench
 2. drive random inputs
-3. have `fun` with pytohn test benches
 
 ---
 
