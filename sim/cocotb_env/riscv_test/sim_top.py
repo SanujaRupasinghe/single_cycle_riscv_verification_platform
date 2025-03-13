@@ -14,18 +14,18 @@ async def generate_clock(dut):
 def log_signals(dut):
     # Log signals (add signals as needed)
     dut._log.info(
-        f"reset={dut.rst.value}, "
-        f"result_pass={dut.result_pass.value}, "
-        f"result_valid={dut.result_valid.value}"
+        f"reset={dut.reset.value}, "
+        f"result_valid={dut.result_valid.value}, "
+        f"result_passed={dut.result_passed.value}"
     )
 
 @cocotb.test()
 async def core_test_(dut):
     cocotb.start_soon(generate_clock(dut))
     
-    dut.rst.value = 1
+    dut.reset.value = 1
     await RisingEdge(dut.clk)
-    dut.rst.value = 0
+    dut.reset.value = 0
     
     # Run for a few cycles
     for _ in range(20):

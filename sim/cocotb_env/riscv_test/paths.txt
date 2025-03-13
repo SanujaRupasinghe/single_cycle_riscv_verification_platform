@@ -1,1 +1,1 @@
-apath to core.v file =   ../../../rtl/core.v
+apath to sim_top.sv file =   ../../../rtl/sim_top.sv
