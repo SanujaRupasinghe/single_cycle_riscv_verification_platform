@@ -1,0 +1,1 @@
+apath to core.v file =   ../../../rtl/core.v

@@ -1,7 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1741492693" />
-    <testcase name="pipelined_adder_test_1" classname="test_pipelined_adder" file="/media/sanuja/Storage/RISCV_ENTC_SIG/single_cycle_riscv_verification_platform/cocotb_env/Example2/test_pipelined_adder.py" lineno="62" time="0.010899543762207031" sim_time_ns="39.001" ratio_time="3578.2231670312362" />
-    <testcase name="pipelined_adder_test_2" classname="test_pipelined_adder" file="/media/sanuja/Storage/RISCV_ENTC_SIG/single_cycle_riscv_verification_platform/cocotb_env/Example2/test_pipelined_adder.py" lineno="123" time="0.016463518142700195" sim_time_ns="99.001" ratio_time="6013.356266983332" />
-  </testsuite>
-</testsuites>
