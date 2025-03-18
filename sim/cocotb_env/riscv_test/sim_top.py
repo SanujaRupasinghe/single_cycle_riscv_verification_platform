@@ -1,35 +1,55 @@
 import cocotb
-from cocotb.triggers import Timer, RisingEdge
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge
+import struct
+from riscvmodel.code import decode
 
-# Generate clock signals
-async def generate_clock(dut):
-    while True:
-        dut.clk.value = 0
-        await Timer(1, units="ns")
-        dut.clk.value = 1
-        await Timer(1, units="ns")
-        log_signals(dut)
 
-# Log signals at each clock cycle
-def log_signals(dut):
-    # Log signals (add signals as needed)
-    dut._log.info(
-        f"reset={dut.reset.value}, "
-        f"result_valid={dut.result_valid.value}, "
-        f"result_passed={dut.result_passed.value}"
-    )
+# Load instructions from file (add.text)
+def load_instructions(filename):
+    with open(filename, "rb") as f:
+        data = f.read()
+    instructions = [data[i:i+4] for i in range(0, len(data), 4)]  # Read 4-byte (32-bit) chunks
+    return [struct.unpack("<I", inst)[0] for inst in instructions]  # Convert to integer
 
 @cocotb.test()
-async def core_test_(dut):
-    cocotb.start_soon(generate_clock(dut))
+async def test_instruction_memory(dut):
+    """Test instruction memory programming"""
     
+    # Start the clock (10 ns period -> 100 MHz)
+    cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
+
+    # Reset DUT
     dut.reset.value = 1
+    dut.programming_data_valid.value = 0
+    dut.programming_done.value = 0
     await RisingEdge(dut.clk)
     dut.reset.value = 0
-    
-    # Run for a few cycles
-    for _ in range(20):
+
+    # Load instructions from the file
+    instructions = load_instructions("add.text")
+
+    # Program the instruction memory
+    for i, inst in enumerate(instructions):
+        dut.inst_mem_offset.value = i  # Address to write
+        dut.inst.value = inst           # Instruction value
+        dut.programming_data_valid.value = 1
         await RisingEdge(dut.clk)
-        # insert insturction here
-    
-    dut._log.info("Core simple test completed.")
+        dut.programming_data_valid.value = 0  # Deassert after one clock cycle
+        await RisingEdge(dut.clk)
+
+    # Mark programming as done
+    dut.programming_done.value = 1
+    await RisingEdge(dut.clk)
+    dut.programming_done.value = 0
+
+    # Verify if instructions were written correctly
+    for i, expected_inst in enumerate(instructions):
+        assert int(dut.instruction_memory[i]) == expected_inst, f"Mismatch at {i}: Expected {expected_inst}, got {int(dut.instruction_memory[i])}"
+        try:
+            decodedInst = decode(expected_inst)
+            dut._log.info(f"Instruction {i}: {expected_inst:08x} == {int(dut.instruction_memory[i]):08x} == {decodedInst}")
+        except:
+            dut._log.info(f"Instruction {i}: {expected_inst:08x} == {int(dut.instruction_memory[i]):08x}")
+
+    print("Instruction Memory Programmed Successfully")
