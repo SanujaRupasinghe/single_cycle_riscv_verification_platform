@@ -16,7 +16,7 @@ module core (
 	// that the simulations work.
 
 	// register file
-	reg [31:0] register_file [31:0]
+	reg [31:0] register_file [31:0];
 
 	// just provide rs1 + immediate
 	// When the address is given the data corresponding to that address

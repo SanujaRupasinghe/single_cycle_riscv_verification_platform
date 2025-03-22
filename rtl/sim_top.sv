@@ -1,5 +1,6 @@
 module sim_top #(
-    localparam INST_MEM_ADDR_SIZE = 10 // Address size of the instruction memory read port, 1Kb memory
+    localparam INST_MEM_ADDR_SIZE = 10, // Address size of the instruction memory read port, 1Kb memory
+    localparam DATA_MEM_ADDR_SIZE = 10 // Address size of the data memory read/write port, 1Kb memory
 )(
     input  logic                            reset, clk,
     output logic                            result_valid, result_passed,
@@ -11,6 +12,7 @@ module sim_top #(
     input  logic                            programming_done        // Programming is finished, core can start execution 
 );
 
+    // Instruction memory programming logic
     logic instructions_valid;  // instruction memory is consists of good content
 
     always_ff @(posedge clk) begin
@@ -34,4 +36,28 @@ module sim_top #(
             end
         end
     end
+
+    logic [31:0] pc;
+    logic [31:0] memory_address;
+    logic [31:0] data_to_write;
+    logic [2:0]  func3;
+    logic        write_data;
+    logic [31:0] read_data;
+    logic [31:0] next_pc;
+
+    core u_core (
+        .clk(clk),
+        .rst(reset),
+        .instruction(instruction_memory[pc[INST_MEM_ADDR_SIZE-1:0]]),
+        .pc(pc),
+        .memory_address(memory_address), // used to index data_memory
+        .data_to_write(data_to_write),
+        .func3(func3),
+        .write_data(write_data),
+        .read_data(read_data),    // data from data_memory
+        .next_pc(next_pc)
+    );
+
+    // Data memory programming logic
+
 endmodule

@@ -7,8 +7,9 @@
 SIM ?= verilator
 TOPLEVEL_LANG ?= verilog
 
-VERILOG_SOURCES += $(PWD)/../../../rtl/sim_top.sv
-# use VHDL_SOURCES for VHDL files
+VERILOG_SOURCES += $(PWD)/../../../rtl/sim_top.sv  # Add sim_top module (sim_top.sv) file
+VERILOG_SOURCES += $(PWD)/../../../rtl/core.v  # Add core module (core.v) file
+
 
 # TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
 TOPLEVEL = sim_top
