@@ -1,1 +1,0 @@
-apath to sim_top.sv file =   ../../../rtl/sim_top.sv
