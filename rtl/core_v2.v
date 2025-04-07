@@ -12,6 +12,12 @@ module core_v2 (
 	
 	//output [31:0] next_pc // pc of next instruction to execute
 );
+
+	// store instruction
+	assign data_to_write = rs2;
+	assign func3 = funct3;
+	assign write_data = (opcode == 7'b0100011) ? 1'b1 : 1'b0; 
+
 	integer i;
 	initial begin
 		for (i = 0; i < 32; i = i + 1) begin
@@ -99,7 +105,10 @@ module core_v2 (
 	// lbu, lh, lhu, lw)
 	// Some instructions read from memory and write to regsiter file, to
 	// do that we need to give the memory address to memory
-	assign memory_address = rs1 + i_type_immediate;
+	// if load rs1 + i_type_immediate
+	// if store rs1 + s_type_immediate
+
+	assign memory_address = (opcode == 7'b0100011)? (rs1 + s_type_immediate): (rs1 + i_type_immediate); 
 
 	// data for the address will be given in read_data, the needed data is
 	// byte aligned. 
@@ -177,8 +186,8 @@ module core_v2 (
 	end
 
 	always @(posedge clk) begin
-		// if (write_to_reg_file && (instruction[11:7] == 5'd0)) begin
-		if (write_to_reg_file) begin
+		if (write_to_reg_file && (instruction[11:7] != 5'd0)) begin
+		// if (write_to_reg_file) begin
 			register_file[instruction[11:7]] <= write_back_data;
 		end
 	end

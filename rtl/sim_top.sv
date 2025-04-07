@@ -45,7 +45,7 @@ module sim_top #(
     logic [31:0] pc;
     logic [31:0] memory_address;
     logic [31:0] data_to_write;
-    logic [2:0]  func3;
+    logic [2:0]  funct3;
     logic        write_data;
 
     assign core_clk   = clk;
@@ -61,12 +61,13 @@ module sim_top #(
         .pc(pc),                                     // output // pc of the above instruction
         .memory_address(memory_address),             // output // data_mem address to rd or write // used to index data_memory
         .data_to_write(data_to_write),               // output // data_mem data  
-        .func3(func3),                               // output // func3 of current inst for store instructions
+        .func3(funct3),                               // output // funct3 of current inst for store instructions
         .write_data(write_data)                      // output // write enable for data mem
     );
 
     // test results are given when "sw (x0)-1, rs2" is executed, //write 1 to last mem address
-    assign result_valid = (memory_address == 32'hFFFFFFFF) && (func3 == 0'b010) && write_data;
+    // assign result_valid = (memory_address == 32'hFFFFFFFF) && (funct3 == 3'b010) && write_data;
+    assign result_valid = (memory_address == 32'hFFFFFFFF) && (funct3 == 3'b000) && write_data;
     assign result_passed = data_to_write == 32'd1; 
 
     // Data mem
@@ -78,7 +79,7 @@ module sim_top #(
     logic [3:0] write_strb;
 
     always_comb begin
-	case (func3[1:0])
+	case (funct3[1:0])
 		2'b01: write_strb   = 4'b0011;
 		2'b00: write_strb   = 4'b0001; 
 		2'b10: write_strb   = 4'b1111;
