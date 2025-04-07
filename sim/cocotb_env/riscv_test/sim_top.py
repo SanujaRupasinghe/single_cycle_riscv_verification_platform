@@ -8,9 +8,10 @@ from riscvmodel.code import decode
 
 @cocotb.test()
 async def processor_test(dut):
-    """Test instruction memory programming"""
+    target_text = "target_texts/jal.text"
     global instructions
-    instructions = load_instructions("add.text") 
+    instructions = load_instructions(target_text)
+    dut._log.info(f"Testing {target_text}")
 
     # Start the clock (10 ns period -> 100 MHz)
     clock1 = cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
@@ -79,9 +80,9 @@ def verify_instruction_memory(dut, verbose=0):
         if verbose:
             try:
                 decodedInst = decode(expected_inst)
-                dut._log.info(f"Instruction {i}: {expected_inst:08x} == {int(dut.instruction_memory[i]):08x} == {decodedInst}")
+                dut._log.info(f"PC {i*4:08x}: {expected_inst:08x} == {int(dut.instruction_memory[i]):08x} == {decodedInst}")
             except:
-                dut._log.info(f"Instruction {i}: {expected_inst:08x} == {int(dut.instruction_memory[i]):08x}")
+                dut._log.info(f"PC {i*4:08x}: {expected_inst:08x} == {int(dut.instruction_memory[i]):08x}")
         if int(dut.instruction_memory[i]) != expected_inst:
             dut._log.error(f"Mismatch at {i}: Expected {expected_inst:08x}, got {int(dut.instruction_memory[i]):08x}")
             raise AssertionError(f"Mismatch at {i}: Expected {expected_inst:08x}, got {int(dut.instruction_memory[i]):08x}")
@@ -108,19 +109,19 @@ def log_signals(dut):
         f"{int(dut.pc.value):08x}",
         f"{int(dut.u_core.next_pc.value):08x}",
         f"{int(dut.instr.value):08x}",
-        f"{int(dut.read_data.value):08x}",
-        f"{int(dut.memory_address.value):08x}",
-        f"{int(dut.data_to_write.value):08x}",
-        f"{int(dut.write_data.value)}",
-        f"{int(dut.u_core.i_type_immediate.value)}",
         f"{int(dut.u_core.write_back_data.value):08x}",
-        f"{int(dut.u_core.write_to_reg_file.value)}"
-
+        f"{int(dut.u_core.write_to_reg_file.value)}",
+        f"{int(dut.memory_address.value):08x}",
+        f"{int(dut.read_data.value):08x}",
+        f"{int(dut.write_data.value)}",
+        f"{int(dut.data_to_write.value):08x}",
+        f"{int(dut.u_core.i_type_immediate.value)}",
+        f"{int(dut.u_core.funct3.value):03x}",
     ]
     log_signal_table.append(row)
 
 def save_log_signals(filename="log_signals.txt", data_list=log_signal_table):
-    headers = ["pc", "next_pc", "instruction", "read_data_from_mem", "memory_address", "write_data_to_mem", "write_enable", "i_immediate", "write_back", "write_to_reg_file"]
+    headers = ["pc", "next_pc", "instr", "writeData_to_reg", "reg_write_en?", "mem_addr", "mem_readData", "mem_write_en?", "mem_writeData", "i_imm", "func3"]
     table = tabulate(data_list, headers=headers, tablefmt="plain")
     
     with open(filename, "w") as f:
