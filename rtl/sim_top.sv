@@ -61,7 +61,7 @@ module sim_top #(
         .pc(pc),                                     // output // pc of the above instruction
         .memory_address(memory_address),             // output // data_mem address to rd or write // used to index data_memory
         .data_to_write(data_to_write),               // output // data_mem data  
-        .func3(funct3),                               // output // funct3 of current inst for store instructions
+        .func3(funct3),                              // output // funct3 of current inst for store instructions
         .write_data(write_data)                      // output // write enable for data mem
     );
 

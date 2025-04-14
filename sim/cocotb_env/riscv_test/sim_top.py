@@ -8,7 +8,9 @@ from riscvmodel.code import decode
 
 @cocotb.test()
 async def processor_test(dut):
-    target_text = "target_texts/jal.text"
+    text_file   = input("file name - ")
+    target_text = f"target_texts/{text_file}.text"
+
     global instructions
     instructions = load_instructions(target_text)
     dut._log.info(f"Testing {target_text}")
@@ -17,10 +19,10 @@ async def processor_test(dut):
     clock1 = cocotb.start_soon(Clock(dut.clk, 10, units="ns").start())
 
     # Reset DUT for x cycles
-    x = 5  # Change x to any number of cycles
-    dut.reset.value = 1
-    dut.programming_data_valid.value = 0
-    dut.programming_done.value = 0
+    x                                   = 5  # Change x to any number of cycles
+    dut.reset.value                     = 1
+    dut.programming_data_valid.value    = 0
+    dut.programming_done.value          = 0
 
     for _ in range(x):
         await RisingEdge(dut.clk)  # Wait for x clock cycles
@@ -28,25 +30,25 @@ async def processor_test(dut):
     dut.reset.value = 0
     # Program the instruction memory
     for i, inst in enumerate(instructions):
-        dut.inst_mem_offset.value = i  # Address to write
-        dut.inst.value = inst           # Instruction value
+        dut.inst_mem_offset.value        = i              # Address to write
+        dut.inst.value                   = inst           # Instruction value
         dut.programming_data_valid.value = 1
         await RisingEdge(dut.clk)
 
     # Mark programming as done
-    dut.programming_data_valid.value = 0
-    dut.programming_done.value = 1
+    dut.programming_data_valid.value     = 0
+    dut.programming_done.value           = 1
 
     verify_instruction_memory(dut, verbose=1)
     
     clock1.cancel()
     cocotb.start_soon(generate_clock(dut))
 
-    # for i in range(8):
-    #     await RisingEdge(dut.clk)
-
     while True:
         await RisingEdge(dut.clk)
+        # dut._log.info(f"Result Valid: {int(dut.result_valid.value)}, Result Passed: {int(dut.result_passed.value)}")
+        # dut._log.info(f"PC: {int(dut.pc.value)}, LEN: {len(instructions) * 4}")
+
         if (dut.result_valid.value and dut.result_passed.value) or dut.pc.value == len(instructions) * 4:
             if dut.result_valid.value and dut.result_passed.value:
                 dut._log.info("Test passed")
