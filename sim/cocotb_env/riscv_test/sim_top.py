@@ -56,8 +56,8 @@ async def processor_test(dut):
                 dut._log.error("Test failed")
             break
 
-    save_log_signals("log_signals.txt", log_signal_table)
-    read_reg_file(dut)
+    save_log_signals("log_signals.text", log_signal_table)
+    read_reg_file(dut, filename="log_register_file.text")
     
 
 # Load instructions from file (add.text)
@@ -68,7 +68,7 @@ def load_instructions(filename):
     return [struct.unpack("<I", inst)[0] for inst in instructions]  # Convert to integer
 
 
-def read_reg_file(dut, filename="reg_file.text"):
+def read_reg_file(dut, filename="log_register_file.text"):
     with open(filename, "w") as f:
         for i in range(32):
             reg_value = int(dut.u_core.register_file[i])
@@ -122,7 +122,7 @@ def log_signals(dut):
     ]
     log_signal_table.append(row)
 
-def save_log_signals(filename="log_signals.txt", data_list=log_signal_table):
+def save_log_signals(filename="log_signals.text", data_list=log_signal_table):
     headers = ["pc", "next_pc", "instr", "writeData_to_reg", "reg_write_en?", "mem_addr", "mem_readData", "mem_write_en?", "mem_writeData", "i_imm", "func3"]
     table = tabulate(data_list, headers=headers, tablefmt="plain")
     

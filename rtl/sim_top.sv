@@ -53,7 +53,7 @@ module sim_top #(
     assign instr      = instruction_memory[pc[INST_MEM_ADDR_SIZE+1:2]];
     assign read_data  = data_memory[memory_address[DATA_MEM_ADDR_SIZE-3:0]];
     
-    core_v2 u_core (
+    core u_core (
         .clk(core_clk),                              // input 
         .rst(core_reset),                            // input 
         .instruction(instr),                         // input  // instruction to be executed // lower two bits are not considered as the instruction_memory is word accessible and pc is the byte address
