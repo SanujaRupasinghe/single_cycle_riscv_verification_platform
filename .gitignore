@@ -4,3 +4,4 @@ venv/
 sim_build/
 log_register_file.text
 log_signals.text
+dump.vcd

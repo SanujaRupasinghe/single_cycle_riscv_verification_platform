@@ -16,7 +16,8 @@ This project provides a framework for implementing a single-cycle RISC-V process
 
 ### Prerequisites
 Before using this framework, ensure you have the following tools installed:
-- **Simulation & Synthesis Tools**: Mention the python versions and libraries needed
+- **Simulation Tools**: Python3, Verilator, gtkwave
+- For more information, visit - https://www.cocotb.org/, https://github.com/YosysHQ/oss-cad-suite-build
 
 ### Setup Instructions
 1. Clone the repository:
@@ -25,26 +26,31 @@ Before using this framework, ensure you have the following tools installed:
    cd single_cycle_riscv_verification_platform
    ```
 2. Open the project in your preferred development environment and open the file rtl/core.v.
-3. Complete module core.
+3. Complete the module core.
 4. Run the simulation using the testbench.
    ```sh
-   python command to run tests
+   cd sim/cocotb_env/
+   python -m venv venv
+   cd riscv_test/
+   pip install -r requirements.txt
+   make
+   (insert file name from target_texts to load instructions)
+   gtkwave dump.vcd
    ```
 
 ## Project Structure
 ```
 ├── rtl
-│   ├── core.v          # single cycle core to be implemented
-│   ├── sim_top.sv      # simulation test bench
-│   ├── control.sv      # Control logic (To be implemented)
-│   ├── memory.sv       # Memory module (Provided)
-│   ├── decoder.sv      # Instruction decoder (Provided)
-│   ├── cpu.sv          # CPU top-level module (Partially provided)
+│   ├── core.v                # single cycle core to be implemented
+│   ├── sim_top.sv            # simulation test bench
 │
-├── sim/cocotb_env (Need to be completed)
-│   ├── sim_top.py       # Testbench
+├── sim/cocotb_env/riscv_test 
+│   ├── target_texts          # instructions to be written to memory
+│   ├── Makefile              # Makefile
+│   ├── requirements.txt      # python venv requirements
+│   ├── sim_top.py            # Testbench
 │
-└── README.md           # This file
+└── README.md                 # Readme
 ```
 
 ## Contributing

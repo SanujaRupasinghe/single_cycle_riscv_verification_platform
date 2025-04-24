@@ -46,8 +46,6 @@ async def processor_test(dut):
 
     while True:
         await RisingEdge(dut.clk)
-        # dut._log.info(f"Result Valid: {int(dut.result_valid.value)}, Result Passed: {int(dut.result_passed.value)}")
-        # dut._log.info(f"PC: {int(dut.pc.value)}, LEN: {len(instructions) * 4}")
 
         if (dut.result_valid.value and dut.result_passed.value) or dut.pc.value == len(instructions) * 4:
             if dut.result_valid.value and dut.result_passed.value:

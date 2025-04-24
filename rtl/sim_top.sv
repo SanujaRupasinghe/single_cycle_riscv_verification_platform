@@ -12,6 +12,12 @@ module sim_top #(
     input  logic                            programming_done        // Programming is finished, core can start execution 
 );
 
+    initial begin
+        $dumpfile("dump.vcd");   // Name of VCD file
+        $dumpvars(0, sim_top);   // Dump all variables in sim_top
+    end
+
+
     // Instruction memory programming logic
     logic instructions_valid;  // instruction memory is consists of good content   if 0 core resetting
 
